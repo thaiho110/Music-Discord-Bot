@@ -1,0 +1,10 @@
+# .gitignore file
+
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+
+# Virtual environment folder (if you use one)
+my_discord_bot_env/
