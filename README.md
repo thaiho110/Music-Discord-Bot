@@ -1,33 +1,45 @@
-### 🎵 MelodyBot: A Python Discord Music Bot
+# 🎵 MelodyBot: A Lavalink-Powered Discord Music Bot
+A feature-rich, asynchronous music bot for Discord, built with Python using **discord.py**. It supports a full music queue system, interactive button controls, scheduled playback, and is optimized for performance.
+This project is designed to be a robust starting point for anyone looking to create their own Discord music bot or learn more about the discord.py library and its advanced features.
+# ✨ Features
+**High-Performance Audio:** Powered by Lavalink, audio processing is offloaded from the bot to a separate server, resulting in smooth, lag-free playback even in busy servers.
 
-> A feature-rich, asynchronous music bot for Discord, built with Python using `discord.py`. It supports a full music queue system, interactive button controls, scheduled playback, and is optimized for performance.
+**Multi-Source Streaming:** Plays music from YouTube (via URL or search query) and can be extended to support other sources like SoundCloud.
 
-This project is designed to be a robust starting point for anyone looking to create their own Discord music bot or learn more about the `discord.py` library and its advanced features.
+**Advanced Queue System:** Add multiple songs or entire playlists to a queue. The bot automatically plays the next song and gracefully handles the end of the queue.
 
-## ✨ Features
+**Interactive UI Controls:** A clean "Now Playing" message with buttons for Pause/Resume, Skip, and Stop. No need to type commands for basic controls!
 
-- **High-Quality Audio Streaming:** Plays music from YouTube (via URL or search query) directly into a voice channel.
-- **Advanced Queue System:** Add multiple songs to a queue. The bot will automatically play the next song when the current one finishes.
-- **Interactive UI Controls:** A clean "Now Playing" message with buttons for **Pause/Resume**, **Skip**, and **Stop**. No need to type commands for basic controls!
-- **Lag-Free Performance:** Uses asynchronous programming and runs blocking tasks in a separate thread to keep the bot responsive at all times.
-- **Scheduled Playback:** Configure the bot to automatically join a specific voice channel at a set time each day and play a "wake-up" song, but only if members are present.
-- **Standard Commands:** Includes text commands for managing the queue (`!play`, `!skip`, `!queue`, `!stop`) and voice connection (`!join`, `!leave`).
-- **Secure and Configurable:** Keeps your bot token safe using a `.env` file and allows for easy configuration of all features.
+**Auto Disconnect:** To save resources, the bot will automatically leave the voice channel after a period of inactivity once the queue has finished.
 
-## 🔧 Prerequisites
+**Comprehensive Commands:** Includes text commands for playing music, managing the queue, and controlling playback (!play, !skip, !queue, !stop, !pause, !resume, !disconnect).
+
+**Secure and Configurable:** Keeps your bot token and Lavalink password safe using a .env file for easy configuration.
+
+# 🔧 Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
 
-1.  **Python 3.8 or higher:** [Download Python](https://www.python.org/downloads/)
-2.  **FFmpeg:** A required library for processing audio.
-    -   **Windows:** [Download FFmpeg](https://ffmpeg.org/download.html) and add the `bin` folder to your system's PATH.
-    -   **macOS (via Homebrew):** `brew install ffmpeg`
-    -   **Linux (Debian/Ubuntu):** `sudo apt install ffmpeg`
-3.  **A Discord Bot Application:**
-    -   Create a new application on the [Discord Developer Portal](https://discord.com/developers/applications).
-    -   In the "Bot" tab, create a bot user and enable the **MESSAGE CONTENT INTENT** and **SERVER MEMBERS INTENT** under "Privileged Gateway Intents".
+Python 3.8 or higher: Download [Python](www.python.org)
 
-## 🚀 Setup and Installation
+Java 17 or higher: Lavalink is a Java application and requires a modern [Java](https://www.java.com/en/) runtime.
+
+Check your version with 
+```bash
+java -version
+```
+
+Lavalink Server: You need the [Lavalink.jar](https://github.com/lavalink-devs/Lavalink) file.
+
+Download the latest Lavalink.jar from the official GitHub releases.
+
+# A Discord Bot Application:
+
+Create a new application on the [Discord Developer Portal](https://discord.com/developers).
+
+In the "Bot" tab, create a bot user and enable the MESSAGE CONTENT INTENT.
+
+# 🚀 Setup and Installation
 
 Follow these steps to get your instance of MelodyBot up and running.
 
@@ -38,23 +50,31 @@ cd YourBotRepository
 ```
 
 # 2. Create a Virtual Environment
-
+   
 It's highly recommended to use a virtual environment to manage dependencies.
 
-**For Windows**
+Windows
 ```bash
 python -m venv .venv
 .\.venv\Scripts\activate
 ```
 
-# 3. Install Dependencies
-
-Create a requirements.txt file with the following content:
-
-**For macOS/Linux**
+macOS / Linux
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
+```
+
+# 4. Install Dependencies
+
+Create a file named requirements.txt in your project root with the following content:
+
+```txt
+# requirements.txt
+
+discord.py
+python-dotenv
+lavalink
 ```
 
 Then, install the packages using pip:
@@ -62,51 +82,103 @@ Then, install the packages using pip:
 pip install -r requirements.txt
 ```
 
-# 4. Configure the Bot
+# 4. Configure the Application
 
-Create a file named .env in the root of your project directory. This is where you will store your secret token and other settings.
+You will need to configure both the Lavalink server and the Python bot.
 
-You can create a .env.example file to show the required variables, and then copy it to .env to fill in your private details.
-```bash
+**A. Configure Lavalink Server**
+
+Create a folder named lavalink-server (or similar) on your machine. It can be outside of your bot's project folder.
+
+Place the Lavalink.jar file you downloaded inside it.
+
+In the same folder, create a file named application.yml and paste the following:
+
+```
+server:
+  port: 2333
+lavalink:
+  server:
+    password: "YourSecurePasswordHere" # Choose a strong password
+```
+**B. Configure the Bot**
+
+In the root of your bot's project directory, create a file named .env.
+
+Add your secret tokens and passwords to this file. It must match your application.yml.
+
+```
 # .env file content
 
 # Your secret bot token from the Discord Developer Portal
 DISCORD_TOKEN=YourActualBotTokenGoesHere
+
+# The password you set in application.yml
+LAVALINK_PASSWORD=YourSecurePasswordHere
+```
+# 5. Running the Application
+
+The bot requires two separate processes to be running: the Lavalink server and the Python bot itself. You will need two separate terminal windows.
+
+**Terminal 1: Start the Lavalink Server**
+```
+# Navigate to your lavalink-server directory
+cd path/to/your/lavalink-server
+```
+```
+# Run the jar file
+java -jar Lavalink.jar
+```
+You should see log output indicating Lavalink is ready to accept connections. Keep this terminal open.
+
+**Terminal 2: Run the Bot**
+```
+# Navigate to your bot's project directory (if you're not already there)
+cd path/to/your/YourBotRepository
+```
+```
+# Run the main bot file (assuming it's named main.py)
+python main.py
 ```
 
-# 5. Run the Bot!
-Once configured, you can start the bot with:
-```bash
-python music_bot.py
-```
-If everything is set up correctly, you will see a confirmation message in your terminal, and the bot will appear as "online" in Discord.
+If everything is set up correctly, you will see a confirmation message in this terminal, and the bot will appear as "online" in Discord.
 
-## 🎶 Bot Usage
+# 🎶 Bot Usage
 
-Invite the bot to your server using the OAuth2 URL generated from the Discord Developer Portal. Make sure to grant it the `bot` and `applications.commands` scopes, along with permissions to **View Channels**, **Send Messages**, **Connect**, and **Speak**.
+Invite the bot to your server using the OAuth2 URL generated from the Discord Developer Portal. Make sure to grant it the bot and applications.commands scopes, along with permissions to View Channels, Send Messages, Connect, and Speak.
 
-### Main Commands
--   `!play <song name or URL>`: Searches for a song on YouTube and adds it to the queue. If the queue is empty, it starts playing immediately.
--   `!queue`: Displays the list of songs currently in the queue.
--   `!skip`: Skips the currently playing song and moves to the next one in the queue.
--   `!stop`: Stops the music, clears the entire queue, and removes the player message.
--   `!join`: Makes the bot join the voice channel you are currently in.
--   `!leave`: Disconnects the bot from its current voice channel.
+# Main Commands
 
-### Button Controls
+!play <song name or URL>: Searches for a song on YouTube and adds it to the queue. If the queue is empty, it starts playing immediately.
+
+!queue: Displays the list of songs currently in the queue.
+
+!skip: Skips the currently playing song and moves to the next one in the queue.
+
+!stop: Stops the music, clears the entire queue, and removes the player message.
+
+!join: Makes the bot join the voice channel you are currently in.
+
+!leave: Disconnects the bot from its current voice channel.
+
+# Button Controls
+
 When a song starts playing, the bot will post a "Now Playing" message with interactive buttons:
--   **⏸️ Pause / ▶️ Resume:** Toggles playback.
--   **⏭️ Skip:** Skips to the next song.
--   **⏹️ Stop:** Stops the music and clears the queue.
 
-## ☁️ Hosting
+⏸️ Pause / ▶️ Resume: Toggles playback.
+
+⏭️ Skip: Skips to the next song.
+
+⏹️ Stop: Stops the music and clears the queue.
+
+# ☁️ Hosting
 
 To make the bot available 24/7, you need to host it on a server.
 
-## ⚠️ Important Disclaimer
+# ⚠️ Important Disclaimer
 
 This bot is designed to stream audio from sources like YouTube for personal use. The act of streaming copyrighted material may violate the Terms of Service of both the streaming platform (YouTube) and the hosting provider.
-
--   The developers of this project are not responsible for how it is used.
--   Running a large, public music bot that streams from YouTube is against their ToS and will likely result in a shutdown.
--   **Use at your own risk.** This project is intended for educational and small-scale personal use.
+The developers of this project are not responsible for how it is used.
+Running a large, public music bot that streams from YouTube is against their ToS and will likely result in a shutdown.
+Use at your own risk. This project is intended for educational and small-scale personal use.
+Please update this readme for me please
